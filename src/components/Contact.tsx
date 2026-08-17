@@ -279,7 +279,7 @@ export const Contact: React.FC = () => {
                     ) : (
                       <>
                         <Send className="w-4 h-4" />
-                        <span>Send Message to saravananrohith488@gmail.com</span>
+                        <span>Send Message</span>
                       </>
                     )}
                   </button>
