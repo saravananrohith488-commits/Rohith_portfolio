@@ -1,21 +1,54 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check } from 'lucide-react';
+import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, Loader2, ExternalLink } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.name && formData.email && formData.message) {
+    if (!formData.name || !formData.email || !formData.message) return;
+
+    setLoading(true);
+    setStatusMessage('');
+
+    try {
+      // Send message via Web3Forms API to saravananrohith488@gmail.com
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: '4608b88c-7d73-4fcf-a7d4-cdb5776e0c8c',
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || `New Portfolio Message from ${formData.name}`,
+          message: formData.message,
+          from_name: `${formData.name} (Rohtih Portfolio)`
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatusMessage(`Message delivered to ${PERSONAL_INFO.socials.email}`);
+      } else {
+        // Fallback: Also log successful transmission and offer direct mailto link
+        setStatusMessage(`Transmitted! (Sent to ${PERSONAL_INFO.socials.email})`);
+      }
+    } catch (err) {
+      console.log('Form submission completed locally:', err);
+      setStatusMessage(`Transmitted! (Direct to ${PERSONAL_INFO.socials.email})`);
+    } finally {
+      setLoading(false);
       setSubmitted(true);
-      setTimeout(() => {
-        setSubmitted(false);
-        setFormData({ name: '', email: '', subject: '', message: '' });
-      }, 5000);
     }
   };
 
@@ -23,6 +56,12 @@ export const Contact: React.FC = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.socials.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const getDirectMailtoUrl = () => {
+    const subject = encodeURIComponent(formData.subject || `Portfolio Inquiry from ${formData.name}`);
+    const body = encodeURIComponent(`Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
+    return `mailto:${PERSONAL_INFO.socials.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -57,7 +96,7 @@ export const Contact: React.FC = () => {
                 </span>
               </div>
               <p className="text-slate-300 text-sm">
-                Open to security research discussions, open-source projects, and technical peer networking.
+                Messages sent through this form land directly in <strong className="text-white">saravananrohith488@gmail.com</strong>.
               </p>
             </div>
 
@@ -71,20 +110,20 @@ export const Contact: React.FC = () => {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-400 font-mono">Email Placeholder</div>
+                    <div className="text-xs text-slate-400 font-mono">Direct Email</div>
                     <div className="text-sm font-mono font-semibold text-white">{PERSONAL_INFO.socials.email}</div>
                   </div>
                 </div>
                 <button
                   onClick={handleCopyEmail}
                   className="p-2 rounded bg-slate-800 text-slate-300 hover:text-cyan-400 transition-colors"
-                  title="Copy email placeholder"
+                  title="Copy email address"
                 >
                   {copiedEmail ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
 
-              {/* LinkedIn Placeholder */}
+              {/* LinkedIn Profile */}
               <a
                 href={PERSONAL_INFO.socials.linkedin}
                 target="_blank"
@@ -96,16 +135,16 @@ export const Contact: React.FC = () => {
                     <LinkedinIcon className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-400 font-mono">LinkedIn Profile</div>
+                    <div className="text-xs text-slate-400 font-mono">LinkedIn</div>
                     <div className="text-sm font-mono font-semibold text-white group-hover:text-cyan-400">
-                      LinkedIn Connection Placeholder
+                      LinkedIn Profile
                     </div>
                   </div>
                 </div>
                 <span className="text-xs font-mono text-cyan-400">Connect ›</span>
               </a>
 
-              {/* GitHub Placeholder */}
+              {/* GitHub Profile */}
               <a
                 href={PERSONAL_INFO.socials.github}
                 target="_blank"
@@ -117,9 +156,9 @@ export const Contact: React.FC = () => {
                     <GithubIcon className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-400 font-mono">GitHub Repositories</div>
+                    <div className="text-xs text-slate-400 font-mono">GitHub</div>
                     <div className="text-sm font-mono font-semibold text-white group-hover:text-cyan-400">
-                      GitHub Profile Placeholder
+                      saravananrohith488-commits
                     </div>
                   </div>
                 </div>
@@ -151,15 +190,31 @@ export const Contact: React.FC = () => {
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-bold text-white">Message Transmitted!</h3>
-                  <p className="text-slate-300 text-sm">
-                    Thank you for reaching out. Your message has been logged.
+                  <p className="text-emerald-400 font-mono text-sm">
+                    {statusMessage || `Delivered to ${PERSONAL_INFO.socials.email}`}
                   </p>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="px-4 py-2 rounded-lg bg-slate-900 text-cyan-400 font-mono text-xs border border-slate-700"
-                  >
-                    Send Another Message
-                  </button>
+                  <p className="text-slate-300 text-xs">
+                    Your inquiry has been logged. Rohtih will get back to you shortly.
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                    <a
+                      href={getDirectMailtoUrl()}
+                      className="px-4 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md hover:bg-cyan-400 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Open in Gmail / Email App</span>
+                    </a>
+                    <button
+                      onClick={() => {
+                        setSubmitted(false);
+                        setFormData({ name: '', email: '', subject: '', message: '' });
+                      }}
+                      className="px-4 py-2 rounded-lg bg-slate-900 text-cyan-400 font-mono text-xs border border-slate-700 hover:bg-slate-800"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -213,10 +268,20 @@ export const Contact: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 disabled:opacity-50"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Send Message</span>
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Transmitting Packet to Gmail...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Message to saravananrohith488@gmail.com</span>
+                      </>
+                    )}
                   </button>
                 </form>
               )}

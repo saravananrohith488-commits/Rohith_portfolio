@@ -47,6 +47,20 @@ export const About: React.FC = () => {
           <div className="lg:col-span-7 space-y-6">
             
             <div className="glass-card rounded-xl p-6 sm:p-8 space-y-4">
+              
+              <div className="flex items-center gap-4 pb-4 border-b border-slate-800">
+                <img
+                  src="/rohi.jpeg"
+                  alt="Rohtih"
+                  className="w-16 h-16 rounded-full object-cover object-top border-2 border-cyan-400 shadow-md shrink-0"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-white font-mono">{PERSONAL_INFO.name}</h3>
+                  <p className="text-xs text-cyan-300 font-mono">{PERSONAL_INFO.title}</p>
+                  <p className="text-xs text-slate-400">SKCET Coimbatore (2025 - 2029)</p>
+                </div>
+              </div>
+
               <blockquote className="border-l-4 border-cyan-400 pl-4 py-1 text-cyan-300 font-mono text-base italic">
                 "{PERSONAL_INFO.bioQuote}"
               </blockquote>

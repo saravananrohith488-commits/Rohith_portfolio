@@ -161,7 +161,7 @@ export const Projects: React.FC = () => {
                     target="_blank"
                     rel="noreferrer"
                     className="p-2 rounded bg-slate-900 border border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
-                    title="View GitHub Repository Placeholder"
+                    title="View GitHub Repository"
                   >
                     <GithubIcon className="w-4 h-4" />
                   </a>

@@ -18,9 +18,9 @@ export const PERSONAL_INFO = {
   ],
   bioQuote: 'Curious by nature, technical by interest, and always building something.',
   socials: {
-    github: 'https://github.com',
+    github: 'https://github.com/saravananrohith488-commits',
     linkedin: 'https://linkedin.com',
-    email: 'rohtih.skcet@example.com'
+    email: 'saravananrohith488@gmail.com'
   }
 };
 

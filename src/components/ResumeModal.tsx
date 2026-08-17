@@ -46,10 +46,17 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
           
           {/* Header */}
           <div className="border-b border-slate-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-extrabold text-white tracking-tight">{PERSONAL_INFO.name}</h1>
-              <p className="text-cyan-400 font-mono text-sm font-semibold mt-0.5">{PERSONAL_INFO.title}</p>
-              <p className="text-slate-400 text-xs mt-1">{PERSONAL_INFO.location} • {PERSONAL_INFO.socials.email}</p>
+            <div className="flex items-center gap-4">
+              <img
+                src="/rohi.jpeg"
+                alt="Rohtih"
+                className="w-16 h-16 rounded-full object-cover object-top border-2 border-cyan-400 shrink-0"
+              />
+              <div>
+                <h1 className="text-3xl font-extrabold text-white tracking-tight">{PERSONAL_INFO.name}</h1>
+                <p className="text-cyan-400 font-mono text-sm font-semibold mt-0.5">{PERSONAL_INFO.title}</p>
+                <p className="text-slate-400 text-xs mt-1">{PERSONAL_INFO.location} • {PERSONAL_INFO.socials.email}</p>
+              </div>
             </div>
             <div className="text-left sm:text-right font-mono text-xs text-slate-400">
               <p className="text-white font-bold">{PERSONAL_INFO.college}</p>

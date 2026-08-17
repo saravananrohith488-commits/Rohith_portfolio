@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Mail, Terminal, MapPin, Lock } from 'lucide-react';
+import { ArrowRight, Mail, Terminal, MapPin, Lock, User, Code } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
@@ -10,6 +10,8 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenTerminal, onOpenResume }) => {
   const [typedText, setTypedText] = useState('');
+  const [viewMode, setViewMode] = useState<'photo' | 'code'>('photo');
+
   const roles = [
     'Cyber Security Student',
     'C / C++ Developer',
@@ -125,6 +127,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal, onOpenResume }) => {
                   rel="noreferrer"
                   className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
                   aria-label="GitHub Profile"
+                  title="GitHub Profile (saravananrohith488-commits)"
                 >
                   <GithubIcon className="w-5 h-5" />
                 </a>
@@ -141,6 +144,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal, onOpenResume }) => {
                   href={`mailto:${PERSONAL_INFO.socials.email}`}
                   className="p-2.5 rounded-lg bg-slate-900/90 border border-slate-700 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors"
                   aria-label="Email"
+                  title="saravananrohith488@gmail.com"
                 >
                   <Mail className="w-5 h-5" />
                 </a>
@@ -154,64 +158,115 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal, onOpenResume }) => {
 
           </div>
 
-          {/* Right Column: Interactive Terminal Preview Box */}
+          {/* Right Column: High-Tech Profile Photo & Code Box */}
           <div className="lg:col-span-5">
-            <div className="glass-card rounded-xl p-5 border border-cyan-500/30 shadow-2xl relative">
-              {/* Header Bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20 mb-4">
+            <div className="glass-card rounded-2xl p-5 border border-cyan-500/40 shadow-2xl relative space-y-4">
+              
+              {/* Card Top Control Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                 </div>
-                <div className="flex items-center gap-1.5 font-mono text-xs text-slate-400">
-                  <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>rohtih@skcet-sec:~</span>
+                
+                {/* View Switcher Tabs */}
+                <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px]">
+                  <button
+                    onClick={() => setViewMode('photo')}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+                      viewMode === 'photo' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <User className="w-3 h-3" />
+                    <span>I am</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('code')}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded transition-colors ${
+                      viewMode === 'code' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Code className="w-3 h-3" />
+                    <span>Code</span>
+                  </button>
                 </div>
+
                 <button
                   onClick={onOpenTerminal}
-                  className="font-mono text-[11px] text-cyan-400 hover:underline"
+                  className="font-mono text-[11px] text-cyan-400 hover:underline flex items-center gap-1"
                 >
-                  [Interactive CLI]
+                  <Terminal className="w-3 h-3" />
+                  <span>CLI</span>
                 </button>
               </div>
 
-              {/* Terminal Code Snippet Preview */}
-              <div className="font-mono text-xs space-y-3 text-slate-300">
-                <div className="text-slate-500">// Student Profile Status</div>
-                <div>
-                  <span className="text-cyan-400">const</span> <span className="text-emerald-300">student</span> = &#123;
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">name</span>: <span className="text-amber-300">"{PERSONAL_INFO.name}"</span>,
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">degree</span>: <span className="text-amber-300">"B.E. CSE — Cyber Security"</span>,
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">college</span>: <span className="text-amber-300">"SKCET Coimbatore"</span>,
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">expectedGraduation</span>: <span className="text-emerald-400">2029</span>,
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">interests</span>: [<span className="text-cyan-300">"Cybersecurity"</span>, <span className="text-cyan-300">"Networking"</span>, <span className="text-cyan-300">"C/C++"</span>],
-                </div>
-                <div className="pl-4">
-                  <span className="text-purple-300">status</span>: <span className="text-emerald-400">"Actively Building Projects"</span>
-                </div>
-                <div>&#125;;</div>
+              {/* View Mode 1: Rohtih's Profile Photo */}
+              {viewMode === 'photo' ? (
+                <div className="space-y-4">
+                  <div className="relative rounded-xl overflow-hidden border-2 border-cyan-500/30 group">
+                    <img
+                      src="/rohi.jpeg"
+                      alt="Rohtih — Cyber Security Student & Developer"
+                      className="w-full h-[380px] sm:h-[420px] object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    />
+                    
+                    {/* Glowing Scanline Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050811] via-transparent to-transparent opacity-80"></div>
+                    
+                    {/* Security Badge */}
+                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-slate-950/80 border border-emerald-400/50 backdrop-blur-md flex items-center gap-1.5 font-mono text-xs text-emerald-300">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                      <span>SEC_VERIFIED</span>
+                    </div>
 
-                <div className="pt-2 flex items-center justify-between border-t border-slate-800 text-[11px]">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <Lock className="w-3 h-3 text-emerald-400" /> Security Check: PASS
-                  </span>
-                  <span className="text-emerald-400 font-bold">2nd Prize SKCET Expo '25</span>
+                    {/* Bottom Label Overlay */}
+                    <div className="absolute bottom-3 left-3 right-3 p-3 rounded-lg bg-slate-950/80 border border-cyan-500/30 backdrop-blur-md flex items-center justify-between">
+                      <div>
+                        <div className="font-bold text-white text-sm font-mono">{PERSONAL_INFO.name}</div>
+                        <div className="text-[11px] text-cyan-300 font-mono">SKCET Cyber Security '29</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* View Mode 2: Interactive Terminal Code Snippet Preview */
+                <div className="font-mono text-xs space-y-3 text-slate-300 py-2">
+                  <div className="text-slate-500">// Student Profile Status</div>
+                  <div>
+                    <span className="text-cyan-400">const</span> <span className="text-emerald-300">student</span> = &#123;
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">name</span>: <span className="text-amber-300">"{PERSONAL_INFO.name}"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">degree</span>: <span className="text-amber-300">"B.E. CSE — Cyber Security"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">college</span>: <span className="text-amber-300">"SKCET Coimbatore"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">email</span>: <span className="text-cyan-300">"{PERSONAL_INFO.socials.email}"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">github</span>: <span className="text-cyan-300">"saravananrohith488-commits"</span>,
+                  </div>
+                  <div className="pl-4">
+                    <span className="text-purple-300">expectedGraduation</span>: <span className="text-emerald-400">2029</span>
+                  </div>
+                  <div>&#125;;</div>
+
+                  <div className="pt-2 flex items-center justify-between border-t border-slate-800 text-[11px]">
+                    <span className="text-slate-400 flex items-center gap-1">
+                      <Lock className="w-3 h-3 text-emerald-400" /> Security Check: PASS
+                    </span>
+                    <span className="text-emerald-400 font-bold">2nd Prize SKCET Expo '25</span>
+                  </div>
+                </div>
+              )}
 
               {/* Quick Stat Pill Grid */}
-              <div className="grid grid-cols-2 gap-3 pt-4 mt-4 border-t border-slate-800/80">
+              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800/80">
                 <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-center">
                   <div className="text-xl font-bold font-mono text-cyan-400">B.E. CSE</div>
                   <div className="text-[11px] text-slate-400">Cyber Security</div>
