@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenResume }) 
           </div>
           <div>
             <span className="font-mono font-bold text-lg text-white tracking-wider">
-              ROHTIH<span className="text-cyan-400">.sys</span>
+              ROHITH<span className="text-cyan-400">.sys</span>
             </span>
             <span className="block text-[10px] font-mono text-emerald-400 tracking-widest uppercase">
               SEC_LEVEL: STUDENT

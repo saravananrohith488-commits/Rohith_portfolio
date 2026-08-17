@@ -22,7 +22,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
         <div className="bg-[#070b16] px-6 py-4 border-b border-cyan-500/30 flex items-center justify-between">
           <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm">
             <FileText className="w-5 h-5" />
-            <span className="font-bold text-white">RESUME_VIEW — ROHTIH.pdf</span>
+            <span className="font-bold text-white">RESUME_VIEW — ROHITH.pdf</span>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -49,7 +49,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             <div className="flex items-center gap-4">
               <img
                 src="/rohi.jpeg"
-                alt="Rohtih"
+                alt="Rohith"
                 className="w-16 h-16 rounded-full object-cover object-top border-2 border-cyan-400 shrink-0"
               />
               <div>

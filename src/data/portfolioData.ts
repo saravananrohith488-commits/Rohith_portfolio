@@ -1,7 +1,7 @@
 import type { Project, Achievement, TimelineEvent, DSAConcept, CSCoreTopic } from '../types';
 
 export const PERSONAL_INFO = {
-  name: 'Rohtih',
+  name: 'Rohith',
   title: 'Cyber Security Student | Developer | Tech Enthusiast',
   tagline: 'Engineering student exploring cybersecurity, software development, networking and emerging technologies through hands-on projects.',
   education: 'B.E. Computer Science and Engineering — Cyber Security',

@@ -13,7 +13,7 @@ export const Contact: React.FC = () => {
   const getGmailWebUrl = () => {
     const subject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name || 'Visitor'}`);
     const body = encodeURIComponent(
-      `Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      `Hi Rohith,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${PERSONAL_INFO.socials.email}&su=${subject}&body=${body}`;
   };
@@ -21,7 +21,7 @@ export const Contact: React.FC = () => {
   const getDirectMailtoUrl = () => {
     const subject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name || 'Visitor'}`);
     const body = encodeURIComponent(
-      `Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      `Hi Rohith,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
     return `mailto:${PERSONAL_INFO.socials.email}?subject=${subject}&body=${body}`;
   };
@@ -47,7 +47,7 @@ export const Contact: React.FC = () => {
           email: formData.email,
           subject: formData.subject || `New Security Contact from ${formData.name}`,
           message: formData.message,
-          from_name: `${formData.name} (Rohtih Portfolio)`,
+          from_name: `${formData.name} (Rohith Portfolio)`,
           botcheck: false
         })
       });

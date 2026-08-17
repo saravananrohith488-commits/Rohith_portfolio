@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center justify-center md:justify-start gap-2">
               <Shield className="w-5 h-5 text-cyan-400" />
               <span className="font-mono font-extrabold text-lg text-white tracking-wider uppercase">
-                ROHTIH
+                ROHITH
               </span>
             </div>
             <p className="text-slate-400 text-xs font-mono">
@@ -64,7 +64,7 @@ export const Footer: React.FC = () => {
         {/* Bottom Copyright */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-2">
           <div>
-            © 2026 Rohtih. All rights reserved.
+            © 2026 Rohith. All rights reserved.
           </div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>

@@ -51,7 +51,7 @@ export const About: React.FC = () => {
               <div className="flex items-center gap-4 pb-4 border-b border-slate-800">
                 <img
                   src="/rohi.jpeg"
-                  alt="Rohtih"
+                  alt="Rohith"
                   className="w-16 h-16 rounded-full object-cover object-top border-2 border-cyan-400 shadow-md shrink-0"
                 />
                 <div>

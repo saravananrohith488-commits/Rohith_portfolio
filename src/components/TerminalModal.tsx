@@ -19,7 +19,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
       command: 'welcome',
       output: (
         <div className="space-y-1 text-slate-300">
-          <p className="text-cyan-400 font-bold">ROHTIH SECURITY CLI TERMINAL v1.0.4</p>
+          <p className="text-cyan-400 font-bold">ROHITH SECURITY CLI TERMINAL v1.0.4</p>
           <p>Type <span className="text-emerald-400 font-bold">'help'</span> to view available commands.</p>
         </div>
       )
@@ -52,11 +52,11 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
         outputNode = (
           <div className="space-y-1 text-slate-300">
             <p className="text-cyan-400">Available commands:</p>
-            <p><span className="text-emerald-400 font-bold">whoami</span> — Display Rohtih profile &amp; background</p>
+            <p><span className="text-emerald-400 font-bold">whoami</span> — Display Rohith profile &amp; background</p>
             <p><span className="text-emerald-400 font-bold">skills</span> — List programming languages &amp; technical stack</p>
             <p><span className="text-emerald-400 font-bold">projects</span> — View cybersecurity &amp; Android projects</p>
             <p><span className="text-emerald-400 font-bold">achievements</span> — View SKCET 2nd Prize award details</p>
-            <p><span className="text-emerald-400 font-bold">contact</span> — Get contact info &amp; social placeholders</p>
+            <p><span className="text-emerald-400 font-bold">contact</span> — Get contact info &amp; social profiles</p>
             <p><span className="text-emerald-400 font-bold">sudo hire</span> — Execute recruiter evaluation</p>
             <p><span className="text-emerald-400 font-bold">clear</span> — Clear terminal window</p>
           </div>
@@ -128,7 +128,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
         outputNode = (
           <div className="p-3 rounded bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 space-y-1">
             <p className="font-bold">[SECURITY PERMISSION: GRANTED]</p>
-            <p>Rohtih is motivated, builds real projects, understands DSA fundamentals, and continuously explores cybersecurity!</p>
+            <p>Rohith is motivated, builds real projects, understands DSA fundamentals, and continuously explores cybersecurity!</p>
             <p className="text-xs text-emerald-400">Recommendation: Great candidate for internships &amp; student engineering programs!</p>
           </div>
         );
@@ -160,7 +160,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
         <div className="bg-[#0b1221] px-4 py-2.5 border-b border-cyan-500/30 flex items-center justify-between">
           <div className="flex items-center gap-2 text-cyan-400">
             <Terminal className="w-4 h-4" />
-            <span className="font-bold text-xs text-white">rohtih@skcet-security-cli:~</span>
+            <span className="font-bold text-xs text-white">rohith@skcet-security-cli:~</span>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -178,7 +178,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
             <div key={idx} className="space-y-1">
               {item.command !== 'welcome' && (
                 <div className="flex items-center gap-2 text-cyan-400">
-                  <span>rohtih@skcet:~$</span>
+                  <span>rohith@skcet:~$</span>
                   <span className="text-white font-bold">{item.command}</span>
                 </div>
               )}
@@ -190,7 +190,7 @@ export const TerminalModal: React.FC<TerminalModalProps> = ({ isOpen, onClose })
 
         {/* Input Bar */}
         <form onSubmit={handleCommand} className="p-3 bg-[#090d18] border-t border-slate-800 flex items-center gap-2">
-          <span className="text-cyan-400 font-bold">rohtih@skcet:~$</span>
+          <span className="text-cyan-400 font-bold">rohith@skcet:~$</span>
           <input
             ref={inputRef}
             type="text"

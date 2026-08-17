@@ -201,13 +201,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal, onOpenResume }) => {
                 </button>
               </div>
 
-              {/* View Mode 1: Rohtih's Profile Photo */}
+              {/* View Mode 1: Rohith's Profile Photo */}
               {viewMode === 'photo' ? (
                 <div className="space-y-4">
                   <div className="relative rounded-xl overflow-hidden border-2 border-cyan-500/30 group">
                     <img
                       src="/rohi.jpeg"
-                      alt="Rohtih — Cyber Security Student & Developer"
+                      alt="Rohith — Cyber Security Student & Developer"
                       className="w-full h-[380px] sm:h-[420px] object-cover object-top group-hover:scale-105 transition-transform duration-500"
                     />
                     
