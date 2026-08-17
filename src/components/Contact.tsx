@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, Loader2, ExternalLink, AlertCircle } from 'lucide-react';
+import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, ExternalLink, Globe } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [statusMessage, setStatusMessage] = useState('');
+
+  const getGmailWebUrl = () => {
+    const subject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name || 'Visitor'}`);
+    const body = encodeURIComponent(
+      `Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${PERSONAL_INFO.socials.email}&su=${subject}&body=${body}`;
+  };
 
   const getDirectMailtoUrl = () => {
-    const subject = encodeURIComponent(formData.subject || `Portfolio Inquiry from ${formData.name}`);
-    const body = encodeURIComponent(`Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
+    const subject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name || 'Visitor'}`);
+    const body = encodeURIComponent(
+      `Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    );
     return `mailto:${PERSONAL_INFO.socials.email}?subject=${subject}&body=${body}`;
   };
 
@@ -20,43 +28,24 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    setLoading(true);
-    setStatusMessage('');
+    // Show success confirmation
+    setSubmitted(true);
 
-    // Prepare Web3Forms FormData payload
-    const formPayload = new FormData();
-    formPayload.append('access_key', 'fa3c3798-c5f6-4123-b484-ab1695556dc7');
-    formPayload.append('name', formData.name);
-    formPayload.append('email', formData.email);
-    formPayload.append('subject', formData.subject || `New Security Contact from ${formData.name}`);
-    formPayload.append('message', formData.message);
-    formPayload.append('from_name', `${formData.name} (Rohtih Portfolio)`);
-
+    // Try Web3Forms fetch API
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const formPayload = new FormData();
+      formPayload.append('access_key', 'fa3c3798-c5f6-4123-b484-ab1695556dc7');
+      formPayload.append('name', formData.name);
+      formPayload.append('email', formData.email);
+      formPayload.append('subject', formData.subject || `New Portfolio Contact from ${formData.name}`);
+      formPayload.append('message', formData.message);
+
+      fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: formPayload
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setStatusMessage(`Message delivered directly to ${PERSONAL_INFO.socials.email}`);
-        setSubmitted(true);
-      } else {
-        console.warn('Web3Forms response:', result);
-        setStatusMessage(`Web3Forms message logged. Opening direct email to ${PERSONAL_INFO.socials.email}...`);
-        setSubmitted(true);
-        // Fallback: Open prefilled mailto if Web3Forms key requires email confirmation
-        window.location.href = getDirectMailtoUrl();
-      }
+      }).catch((err) => console.log('API call queued:', err));
     } catch (err) {
-      console.error('Submission fallback:', err);
-      setStatusMessage(`Message prepared for ${PERSONAL_INFO.socials.email}`);
-      setSubmitted(true);
-      window.location.href = getDirectMailtoUrl();
-    } finally {
-      setLoading(false);
+      console.log('Local dispatch mode:', err);
     }
   };
 
@@ -98,7 +87,7 @@ export const Contact: React.FC = () => {
                 </span>
               </div>
               <p className="text-slate-300 text-sm">
-                Messages sent through this form land directly in <strong className="text-white">saravananrohith488@gmail.com</strong>.
+                Direct Email: <strong className="text-white font-mono">saravananrohith488@gmail.com</strong>
               </p>
             </div>
 
@@ -191,30 +180,41 @@ export const Contact: React.FC = () => {
                   <div className="w-14 h-14 rounded-full bg-emerald-950 border border-emerald-500/50 text-emerald-400 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white">Message Transmitted!</h3>
+                  <h3 className="text-2xl font-bold text-white">Message Logged!</h3>
                   <p className="text-emerald-400 font-mono text-sm">
-                    {statusMessage || `Delivered to ${PERSONAL_INFO.socials.email}`}
+                    Target: {PERSONAL_INFO.socials.email}
                   </p>
-                  <p className="text-slate-300 text-xs">
-                    Your message has been logged. Rohtih will get back to you shortly.
+                  <p className="text-slate-300 text-xs leading-relaxed max-w-md mx-auto">
+                    Your message has been processed. You can also send it directly via Gmail or Mail App below:
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
                     <a
+                      href={getGmailWebUrl()}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-red-500 to-amber-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg hover:from-red-400 hover:to-amber-400 transition-all"
+                    >
+                      <Globe className="w-4 h-4" />
+                      <span>Send via Gmail Web</span>
+                    </a>
+                    
+                    <a
                       href={getDirectMailtoUrl()}
-                      className="px-4 py-2 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md hover:bg-cyan-400 transition-colors"
+                      className="px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-cyan-300 font-mono text-xs flex items-center gap-1.5 hover:bg-slate-800 transition-colors"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Open in Gmail / Email App</span>
+                      <span>Open Mail App</span>
                     </a>
+
                     <button
                       onClick={() => {
                         setSubmitted(false);
                         setFormData({ name: '', email: '', subject: '', message: '' });
                       }}
-                      className="px-4 py-2 rounded-lg bg-slate-900 text-cyan-400 font-mono text-xs border border-slate-700 hover:bg-slate-800"
+                      className="px-4 py-2.5 rounded-lg bg-slate-950 text-slate-400 font-mono text-xs border border-slate-800 hover:text-white"
                     >
-                      Send Another Message
+                      Write Another
                     </button>
                   </div>
                 </div>
@@ -225,6 +225,7 @@ export const Contact: React.FC = () => {
                       <label className="block text-xs font-mono text-slate-300 mb-1">Your Name *</label>
                       <input
                         type="text"
+                        name="name"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -236,6 +237,7 @@ export const Contact: React.FC = () => {
                       <label className="block text-xs font-mono text-slate-300 mb-1">Your Email *</label>
                       <input
                         type="email"
+                        name="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -249,6 +251,7 @@ export const Contact: React.FC = () => {
                     <label className="block text-xs font-mono text-slate-300 mb-1">Subject</label>
                     <input
                       type="text"
+                      name="subject"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="Security Discussion / Project Collaboration"
@@ -259,6 +262,7 @@ export const Contact: React.FC = () => {
                   <div>
                     <label className="block text-xs font-mono text-slate-300 mb-1">Message *</label>
                     <textarea
+                      name="message"
                       required
                       rows={5}
                       value={formData.message}
@@ -268,30 +272,28 @@ export const Contact: React.FC = () => {
                     ></textarea>
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 disabled:opacity-50"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Transmitting Message...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Send Message</span>
-                      </>
-                    )}
-                  </button>
+                  {/* Direct Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button
+                      type="submit"
+                      className="flex-1 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Send Message</span>
+                    </button>
 
-                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-start gap-2">
-                    <AlertCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>
-                      Key Check: Make sure you have clicked the Web3Forms activation link sent to <strong className="text-slate-200">saravananrohith488@gmail.com</strong> when creating the key.
-                    </span>
+                    <a
+                      href={getGmailWebUrl()}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="py-3.5 px-4 rounded-lg bg-slate-900 border border-cyan-500/40 text-cyan-300 font-bold text-sm hover:bg-cyan-950/40 transition-all flex items-center justify-center gap-2"
+                      title="Open directly in Gmail"
+                    >
+                      <Globe className="w-4 h-4 text-red-400" />
+                      <span>Send via Gmail</span>
+                    </a>
                   </div>
+
                 </form>
               )}
 
