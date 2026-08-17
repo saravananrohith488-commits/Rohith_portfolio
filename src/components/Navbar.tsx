@@ -22,10 +22,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenResume }) 
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
     { name: 'Skills', href: '#skills' },
-    { name: 'CS Knowledge', href: '#cs-knowledge' },
     { name: 'Projects', href: '#projects' },
     { name: 'Achievements', href: '#achievements' },
-    { name: 'Journey', href: '#journey' },
+    { name: 'Education', href: '#education' },
+    { name: 'Learning Journey', href: '#journey' },
     { name: 'Contact', href: '#contact' },
   ];
 
@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal, onOpenResume }) 
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center space-x-6 text-sm font-medium">
+        <nav className="hidden lg:flex items-center space-x-5 text-sm font-medium">
           {navLinks.map((link) => (
             <a
               key={link.name}

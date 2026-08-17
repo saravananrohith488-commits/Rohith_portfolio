@@ -7,6 +7,7 @@ import { CSKnowledge } from './components/CSKnowledge';
 import { Projects } from './components/Projects';
 import { HardwareAndSystems } from './components/HardwareAndSystems';
 import { Achievements } from './components/Achievements';
+import { Education } from './components/Education';
 import { Timeline } from './components/Timeline';
 import { Interests } from './components/Interests';
 import { Contact } from './components/Contact';
@@ -51,6 +52,7 @@ export function App() {
         <Projects />
         <HardwareAndSystems />
         <Achievements />
+        <Education />
         <Timeline />
         <Interests />
         <Contact />
