@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, Loader2, ExternalLink } from 'lucide-react';
+import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, Loader2, ExternalLink, AlertCircle } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
@@ -10,6 +10,12 @@ export const Contact: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
 
+  const getDirectMailtoUrl = () => {
+    const subject = encodeURIComponent(formData.subject || `Portfolio Inquiry from ${formData.name}`);
+    const body = encodeURIComponent(`Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
+    return `mailto:${PERSONAL_INFO.socials.email}?subject=${subject}&body=${body}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
@@ -17,38 +23,40 @@ export const Contact: React.FC = () => {
     setLoading(true);
     setStatusMessage('');
 
+    // Prepare Web3Forms FormData payload
+    const formPayload = new FormData();
+    formPayload.append('access_key', 'fa3c3798-c5f6-4123-b484-ab1695556dc7');
+    formPayload.append('name', formData.name);
+    formPayload.append('email', formData.email);
+    formPayload.append('subject', formData.subject || `New Security Contact from ${formData.name}`);
+    formPayload.append('message', formData.message);
+    formPayload.append('from_name', `${formData.name} (Rohtih Portfolio)`);
+
     try {
-      // Send message via Web3Forms API to saravananrohith488@gmail.com
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({
-          access_key: '4608b88c-7d73-4fcf-a7d4-cdb5776e0c8c',
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject || `New Portfolio Message from ${formData.name}`,
-          message: formData.message,
-          from_name: `${formData.name} (Rohtih Portfolio)`
-        })
+        body: formPayload
       });
 
       const result = await response.json();
 
       if (result.success) {
-        setStatusMessage(`Message delivered to ${PERSONAL_INFO.socials.email}`);
+        setStatusMessage(`Message delivered directly to ${PERSONAL_INFO.socials.email}`);
+        setSubmitted(true);
       } else {
-        // Fallback: Also log successful transmission and offer direct mailto link
-        setStatusMessage(`Transmitted! (Sent to ${PERSONAL_INFO.socials.email})`);
+        console.warn('Web3Forms response:', result);
+        setStatusMessage(`Web3Forms message logged. Opening direct email to ${PERSONAL_INFO.socials.email}...`);
+        setSubmitted(true);
+        // Fallback: Open prefilled mailto if Web3Forms key requires email confirmation
+        window.location.href = getDirectMailtoUrl();
       }
     } catch (err) {
-      console.log('Form submission completed locally:', err);
-      setStatusMessage(`Transmitted! (Direct to ${PERSONAL_INFO.socials.email})`);
+      console.error('Submission fallback:', err);
+      setStatusMessage(`Message prepared for ${PERSONAL_INFO.socials.email}`);
+      setSubmitted(true);
+      window.location.href = getDirectMailtoUrl();
     } finally {
       setLoading(false);
-      setSubmitted(true);
     }
   };
 
@@ -56,12 +64,6 @@ export const Contact: React.FC = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.socials.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
-  };
-
-  const getDirectMailtoUrl = () => {
-    const subject = encodeURIComponent(formData.subject || `Portfolio Inquiry from ${formData.name}`);
-    const body = encodeURIComponent(`Hi Rohtih,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`);
-    return `mailto:${PERSONAL_INFO.socials.email}?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -194,7 +196,7 @@ export const Contact: React.FC = () => {
                     {statusMessage || `Delivered to ${PERSONAL_INFO.socials.email}`}
                   </p>
                   <p className="text-slate-300 text-xs">
-                    Your inquiry has been logged. Rohtih will get back to you shortly.
+                    Your message has been logged. Rohtih will get back to you shortly.
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
@@ -274,7 +276,7 @@ export const Contact: React.FC = () => {
                     {loading ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Transmitting Packet to Gmail...</span>
+                        <span>Transmitting Message...</span>
                       </>
                     ) : (
                       <>
@@ -283,6 +285,13 @@ export const Contact: React.FC = () => {
                       </>
                     )}
                   </button>
+
+                  <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 flex items-start gap-2">
+                    <AlertCircle className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                    <span>
+                      Key Check: Make sure you have clicked the Web3Forms activation link sent to <strong className="text-slate-200">saravananrohith488@gmail.com</strong> when creating the key.
+                    </span>
+                  </div>
                 </form>
               )}
 
