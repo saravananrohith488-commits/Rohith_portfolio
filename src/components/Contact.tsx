@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, ExternalLink, Globe } from 'lucide-react';
+import { Mail, Send, CheckCircle2, ShieldCheck, MapPin, Copy, Check, ExternalLink, Globe, Loader2 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
   const getGmailWebUrl = () => {
     const subject = encodeURIComponent(formData.subject || `Portfolio Message from ${formData.name || 'Visitor'}`);
@@ -28,24 +30,47 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    // Show success confirmation
-    setSubmitted(true);
+    setLoading(true);
+    setStatusMessage('');
 
-    // Try Web3Forms fetch API
     try {
-      const formPayload = new FormData();
-      formPayload.append('access_key', 'fa3c3798-c5f6-4123-b484-ab1695556dc7');
-      formPayload.append('name', formData.name);
-      formPayload.append('email', formData.email);
-      formPayload.append('subject', formData.subject || `New Portfolio Contact from ${formData.name}`);
-      formPayload.append('message', formData.message);
-
-      fetch('https://api.web3forms.com/submit', {
+      // Standard JSON payload for Web3Forms API online deployment
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formPayload
-      }).catch((err) => console.log('API call queued:', err));
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: 'fa3c3798-c5f6-4123-b484-ab1695556dc7',
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject || `New Security Contact from ${formData.name}`,
+          message: formData.message,
+          from_name: `${formData.name} (Rohtih Portfolio)`,
+          botcheck: false
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatusMessage(`Message delivered directly to ${PERSONAL_INFO.socials.email}`);
+        setSubmitted(true);
+      } else {
+        console.warn('Web3Forms Online Notice:', result);
+        setStatusMessage(`Web3Forms Online Check: Opening email to ${PERSONAL_INFO.socials.email}...`);
+        setSubmitted(true);
+        // Fallback: If domain restriction is active on online host, open direct mailto
+        window.location.href = getDirectMailtoUrl();
+      }
     } catch (err) {
-      console.log('Local dispatch mode:', err);
+      console.warn('Submission fallback:', err);
+      setStatusMessage(`Message logged for ${PERSONAL_INFO.socials.email}`);
+      setSubmitted(true);
+      window.location.href = getDirectMailtoUrl();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -182,7 +207,7 @@ export const Contact: React.FC = () => {
                   </div>
                   <h3 className="text-2xl font-bold text-white">Message Logged!</h3>
                   <p className="text-emerald-400 font-mono text-sm">
-                    Target: {PERSONAL_INFO.socials.email}
+                    {statusMessage || `Target: ${PERSONAL_INFO.socials.email}`}
                   </p>
                   <p className="text-slate-300 text-xs leading-relaxed max-w-md mx-auto">
                     Your message has been processed. You can also send it directly via Gmail or Mail App below:
@@ -276,10 +301,20 @@ export const Contact: React.FC = () => {
                   <div className="flex flex-col sm:flex-row gap-3 pt-2">
                     <button
                       type="submit"
-                      className="flex-1 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20"
+                      disabled={loading}
+                      className="flex-1 py-3.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-bold text-sm hover:from-cyan-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 disabled:opacity-50"
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Sending Message...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Send Message</span>
+                        </>
+                      )}
                     </button>
 
                     <a
